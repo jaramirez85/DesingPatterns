@@ -19,11 +19,11 @@ public class PictureManager {
     attach(new Image());
   }
 
-  public void notify(ImageListener image){
+  public void notify(ImageListener image) {
+    detach(image);
     for (ImageListener imageListener: images) {
       imageListener.update(image.getColor());
     }
-    detach(image);
   }
   
   public void attach(ImageListener imageListener) {
@@ -32,5 +32,6 @@ public class PictureManager {
 
   public void detach(ImageListener imageListener) {
     images.remove(imageListener);
+    System.out.println("size = " + images.size());
   }
 }
