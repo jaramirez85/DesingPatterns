@@ -1,56 +1,36 @@
 package edu.meli.desingpatterns.observer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PictureManager {
-  public List<Image> images;
-  int imagesActives = 0;
+  public List<ImageListener> images = new ArrayList<>();
 
   public PictureManager() {
-    images.add(new Image());
-    images.add(new Image());
-    images.add(new Image());
-    images.add(new Image());
-    images.add(new Image());
-    images.add(new Image());
-    images.add(new Image());
-    images.add(new Image());
-    images.add(new Image());
-    images.add(new Image());
+    attach(new Image());
+    attach(new Image());
+    attach(new Image());
+    attach(new Image());
+    attach(new Image());
+    attach(new Image());
+    attach(new Image());
+    attach(new Image());
+    attach(new Image());
+    attach(new Image());
   }
 
-  public void RunDemon() throws InterruptedException {
-    Thread.sleep(1000);
-
-    Image lastedImageChanged = null;
-    int imageschanged = 0;
-    for (Image currentImage: images) {
-      if (currentImage.IsPaint) {
-        lastedImageChanged = currentImage;
-        imageschanged++;
-      }
+  public void notify(ImageListener image){
+    for (ImageListener imageListener: images) {
+      imageListener.update(image.getColor());
     }
-
-    if (imagesActives != imageschanged) {
-      imagesActives = imageschanged;
-      this.PainPicture(lastedImageChanged.Color, lastedImageChanged);
-    }
-
-    if (this.images.size() < this.imagesActives) {
-      this.RunDemon();
-    }
+    detach(image);
+  }
+  
+  public void attach(ImageListener imageListener) {
+    this.images.add(imageListener);
   }
 
-  private void PainPicture(String color, Image image) {
-    image.paint(color);
-
-    for (Image currentImage: images) {
-        boolean isSameImage = currentImage.equals(image);
-        if (isSameImage || currentImage.IsPaint) {
-          return;
-        }
-
-        currentImage.Color = color;
-    }
+  public void detach(ImageListener imageListener) {
+    images.remove(imageListener);
   }
 }
